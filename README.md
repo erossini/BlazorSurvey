@@ -2,6 +2,12 @@
 
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/4cb8e86c-aaf8-4d17-bf56-203a42397e12)
 
+This component is a survey generator for [Blazor WebAssembly](https://www.puresourcecode.com/tag/blazor-webassembly/) and [Blazor Server](https://www.puresourcecode.com/tag/blazor-server/). The component is built with .NET6 but it is working also with NET8.
+
+The source code is not publicly available, but you can check the demo [here](https://survey.puresourcecode.com).
+
+If you are interested in using it or like to have the source code, please contact me.
+
 ## Components
 
 ### Basic components
@@ -39,7 +45,389 @@
 - [ ] Page
 - [x] Repeater
 
+## Components
+
+Here is the description of all the elements in the `Survey` component.
+
+### Checkbox
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/12666728-a569-4bc7-958e-a6bed3b3a5ff)
+
+This is an example of the resulting `json`:
+
+```
+{
+  "chk_1": [
+    {
+      "value": 1,
+      "text": "One"
+    }
+  ],
+  "chk_2": [
+    {
+      "value": 2,
+      "text": "Two"
+    }
+  ]
+}
+```
+
+### Comment
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/feae3ac0-e6d9-4343-9aa5-4e89e566eaff)
+
+This is an example of the generated `json`:
+
+```
+{
+  "cmt_1": "This is my first comment",
+  "cmt_2": "This comment is required with a maximum of 50 char"
+}
+```
+
+### Dropdown
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/293b54e9-0857-4345-813a-7892b088d165)
+
+This is an example of the generated `json`:
+
+```
+{
+  "ddl_1": [
+    {
+      "value": "Second",
+      "text": "Second option"
+    }
+  ],
+  "ddl_2": [
+    {
+      "value": "3",
+      "text": "Third option"
+    }
+  ]
+}
+```
+
+### HTML
+
+### ImagePicker
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/17d6dd7a-815f-4208-9860-bd956b2426aa)
+
+This is an example of the generated `json`:
+
+```
+{
+  "imp_1": [
+    {
+      "text": "Kitten 2",
+      "value": "2"
+    }
+  ]
+}
+```
+
+### LikertSkill
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/94e67e0d-c11e-4c29-9610-8ea6a2bfd3b0)
+
+This is an example of the generated `json`:
+
+```
+{
+  "lsk_1": {
+    "value": 2,
+    "text": "Agree"
+  },
+  "lsk_2": {
+    "value": 3,
+    "text": "Somewhat helpful"
+  },
+  "lsk_3": {
+    "value": 4,
+    "text": "Somewhat disatisfied"
+  }
+}
+```
+
+### Matrix
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/2df09720-756a-40c1-8bf0-7138b7eb8771)
+
+This is an example of the resulting `json`:
+
+```
+{
+  "mtx_1": [
+    {
+      "column": 2,
+      "text": "Neither agree or disagree"
+    },
+    {
+      "row": 1,
+      "column": 1,
+      "text": "Agree"
+    },
+    {
+      "row": 2,
+      "column": 4,
+      "text": "Strongly disagree"
+    }
+  ]
+}
+```
+
+### NPS
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/06c6a9d1-4a65-4bb3-91f6-e16b8b278317)
+
+This is an example of the resulting `json`:
+
+```
+{
+  "nps_1": {
+    "value": 7,
+    "text": "7"
+  }
+}
+```
+
+### Panel
+
+### Radiobutton
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/364076da-b596-4b2e-a444-6aba3c8b8be2)
+
+This is an example of the resulting `json`
+
+```
+{
+  "radio1": {
+    "value": 1,
+    "text": "One"
+  },
+  "radio2": {
+    "value": 2,
+    "text": "22"
+  },
+  "radio3": {
+    "value": 3,
+    "text": "33"
+  }
+}
+```
+
+### Rating
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/b30db8b0-a98a-4fd0-9a3a-ae3f6430d764)
+
+This is an example of the generated `json`:
+
+```
+{
+  "rtn_1": {
+    "value": 3,
+    "text": "3"
+  }
+}
+```
+
+### Repeater
+
+### Slider
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/50fcfd7f-8312-4cfb-a00c-ce52183bb880)
+
+This is an example of the generated `json`:
+
+```
+{
+  "sld_1": 3
+}
+```
+
+### Switch
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/ec348b5a-2c5b-458e-8b5a-54e58d46c055)
+
+This is an example of the generated `json`:
+
+```
+{
+  "swc_1": [
+    {
+      "value": 1,
+      "text": ""
+    }
+  ]
+}
+```
+
+### TextBox
+
+A `TextBox` is a place where the user can type some text like the following screenshot:
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/399cdf31-3934-4691-91d0-de51e91a5bb0)
+
+The available types of `TextBox` are:
+
+- Color
+- Date
+- DateTime
+- Email
+- Month
+- Number
+- Password
+- Telephone
+- Text
+- Week
+- URL
+
+To create a `Survey` with all types, here a full example:
+
+```
+@if(form == null)
+{
+    <p>Generating form...</p>
+}
+else {
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+```
+and here the code
+
+```csharp
+@code {
+    Form form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new Textbox() {
+                        Title = "Normal textbox",
+                        Description = "This is a normal textbox",
+                        PlaceHolder = "Enter your name",
+                        IsRequired = true },
+                    new Textbox() {
+                        Title = "Password",
+                        PlaceHolder = "Enter your future password",
+                        Name = "txtPassword",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Password,
+                        IsRequired = true },
+                    new Textbox() {
+                        Title = "Textbox max length 10",
+                        PlaceHolder = "Enter your name",
+                        Name = "txtMaxLength",
+                        MaxLength = 10,
+                        IsRequired = true },
+                    new Textbox() {
+                        Title = "Email validation",
+                        PlaceHolder = "Enter your email",
+                        Name = "txtEmail",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Email },
+                    new Textbox() {
+                        Title = "Number validation",
+                        PlaceHolder = "Enter a number",
+                        Name = "txtNumber",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Number },
+                    new Textbox() {
+                        Title = "Your favorite color",
+                        PlaceHolder = "Pick up a color",
+                        Name = "txtColor",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Color },
+                    new Textbox() {
+                        Title = "Your favorite website",
+                        PlaceHolder = "Enter the url",
+                        Name = "txtUrl",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.URL },
+                    new Textbox() {
+                        Title = "Phone number",
+                        PlaceHolder = "Enter your phone number",
+                        Name = "txtPhone",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Telephone },
+                    new Textbox() {
+                        Title = "Select a date",
+                        PlaceHolder = "Pick up a date you like",
+                        Name = "txtDate",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Date },
+                    new Textbox() {
+                        Title = "Select a date and time",
+                        PlaceHolder = "Pick up a date you like",
+                        Name = "txtDateTime",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.DateTime },
+                    new Textbox() {
+                        Title = "Select a week",
+                        PlaceHolder = "Pick up a week you like",
+                        Name = "txtWeek",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Week },
+                    new Textbox() {
+                        Title = "Select a month",
+                        PlaceHolder = "Pick up a month you like",
+                        Name = "txtMonth",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Month },
+                    new Panel()
+                    {
+                        Title = "This panel contains a Textbox",
+                        PanelElements = new List<IElement>()
+                        {
+                            new Textbox() {
+                                Title = "Normal textbox",
+                                Description = "This is a normal textbox in a Panel",
+                                PlaceHolder = "Enter your name"
+                            }
+                        }
+                    }
+                }
+            };
+
+        StateHasChanged();
+    }
+
+    private void OnFormValuesChanges()
+    {
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+    }
+}
+```
+
+The result is the following screenshot:
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/05077b14-f72f-4829-8517-cc171c374783)
+
+And this is the `json` that the `Survey` component generated when the user submits the form.
+
+```
+{
+  "txt_1": "Enrico",
+  "txt_2": "Password",
+  "txt_3": "0123456789",
+  "txt_4": "info@puresourcecode.com",
+  "txt_5": "3",
+  "txt_6": "#5c2828",
+  "txt_7": "https://puresourcecode.com",
+  "txt_8": "077",
+  "txt_9": "2023-12-19",
+  "txt_10": "2023-12-19T16:19:00",
+  "txt_11": "2023-W51",
+  "txt_12": "2023-12",
+  "pnla346038ba8c34e0ab246bd0909e74984_txt_13.1": "Normal text"
+}
+```
+
 ## Events
+
+Here is the explanation of all the events a `Survey` component can raise and how to use them.
 
 ### OnFormSubmitted
 
