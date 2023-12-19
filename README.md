@@ -53,7 +53,8 @@ For example, if you have in the form only one textbox, the conventional name wil
 To use custom a `Name`, in the `Survey` set to `False` the property `UseNamingComvention` of the survey component. For example:
 
 ```html
-<Survey Form="form" ShowDebug="true"
+<Survey Form="form"
+        ShowDebug="true"
         UseNamingComvention="false"
         OnFormValuesChanged="OnFormValuesChanges"
         OnFormSubmitted="OnFormSubmitted"
@@ -131,4 +132,85 @@ new Radiobutton() {
     }, 
     VisibleIf = "radio1 = 1",
     IsRequired = true },
+```
+
+### Show debug section
+
+The component has a section for debugging the creation of the form and its result. To disable the debug set to `False` the property `ShowDebug`. By default, this property is set to `True` and 2 sections are displayed at the bottom of the form:
+
+- Json Form
+- Json Result
+
+#### Json Form
+
+In this section, the `Survey` component displays the `json` to create the survey itself. This can be used to generate the form a run-time from a file or an API.
+
+An example for the `json` is the following one:
+
+```
+{
+  "elements": [
+    {
+      "type": "Checkbox",
+      "choices": [
+        "One",
+        "Two",
+        "Three",
+        {
+          "label": "Four"
+        }
+      ],
+      "orientation": 1,
+      "description": "Try to check more than one option",
+      "isRequired": false,
+      "isVisible": true,
+      "name": "chk_1",
+      "questionNumber": "1",
+      "title": "This is a checkbox"
+    },
+    {
+      "type": "Checkbox",
+      "choices": [
+        "One",
+        "Two",
+        "Three",
+        {
+          "label": "Four"
+        }
+      ],
+      "description": "Try to check more than one option",
+      "isRequired": false,
+      "isVisible": true,
+      "name": "chk_2",
+      "questionNumber": "2",
+      "title": "This is another checkbox"
+    }
+  ]
+}
+```
+
+The result is a survey like the following screenshot:
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/de93706c-3403-4afb-ad81-3436a8f0ec3a)
+
+ 
+#### Json Result
+
+In debug and if the form is valid, the component shows the resulting `json`. Here an example:
+
+```
+{
+  "chk_1": [
+    {
+      "value": 1,
+      "text": "One"
+    }
+  ],
+  "chk_2": [
+    {
+      "value": 1,
+      "text": "One"
+    }
+  ]
+}
 ```
