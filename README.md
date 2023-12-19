@@ -105,7 +105,7 @@ new Textbox() {
     VisibleIf = "txt1 = '1'" },
 ```
 
-The `TextBox` _txt2_ will be displayed if the value of the _txt1_ is equal to `1`. 
+The `TextBox` _txt2_ will be displayed if the value of the _txt1_ is equal to the string `1`. 
 
 #### Refer to a Radiobutton
 
