@@ -612,6 +612,32 @@ In debug and if the form is valid, the component shows the resulting `json`. Her
 }
 ```
 
+### Show question number
+
+If `ShowQuestionNumber` is set to `True`, the `Survey` shows the number of the question in progression.
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/e099a636-f8ac-4883-8784-f724625a1f24)
+
+If it is set to `False`, only the title and the description are displayed.
+
+![image](https://github.com/erossini/BlazorSurvey/assets/9497415/b787e655-ce0f-4246-a94c-cc26a3509f87)
+
+Here an example.
+
+```
+<Survey Form="form" ShowQuestionNumber="false" />
+```
+
+### Show separator
+
+The property `ShowSeparator` allows you to show or hide the separator between the elements of the form. By default, the separator is not visible. To show it, set to `True` the property `ShowSeparator`. For example:
+
+```html
+<Survey Form="form" ShowSeparator="true" 
+```
+
+The separator is a `div` with the `class` set to `separator`. You can customize the separator using the `css` file.
+
 ### SubmitButtonText
 
 This is the text displayed on the button at the bottom of the survey to run the validation and generate the json. By default, the text of the button is `Submit`. To change the text, use the property `SubmitButtonText`. For example:
