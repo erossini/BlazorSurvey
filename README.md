@@ -39,6 +39,16 @@
 - [ ] Page
 - [x] Repeater
 
+## Events
+
+### OnFormSubmitted
+
+
+
+### OnFormSubmittedError
+
+### OnFormValuesChanged
+
 ## Properties
 
 ### Name
@@ -193,7 +203,6 @@ The result is a survey like the following screenshot:
 
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/de93706c-3403-4afb-ad81-3436a8f0ec3a)
 
- 
 #### Json Result
 
 In debug and if the form is valid, the component shows the resulting `json`. Here an example:
@@ -213,4 +222,12 @@ In debug and if the form is valid, the component shows the resulting `json`. Her
     }
   ]
 }
+```
+
+### SubmitButtonText
+
+This is the text displayed on the button at the bottom of the survey to run the validation and generate the json. By default, the text of the button is `Submit`. To change the text, use the property `SubmitButtonText`. For example:
+
+```
+<Survey Form="form" SubmitButtonText="Send" />
 ```
