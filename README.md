@@ -41,7 +41,7 @@
 
 ## Properties
 
-## Name
+### Name
 
 Each element has a property called `Name` that allows you to identify the element in the form. This property is required.
 
@@ -77,7 +77,7 @@ By default the property `UseNamingComvention` is set to `True` and every compone
 | Repeater    | rpt        |
 | Slider      | sld        |
 | Switch      | swc        |
-| Textbox     | txt        |
+| TextBox     | txt        |
 
 ### VisibleIf
 
@@ -85,3 +85,50 @@ Each element has a property called `VisibleIf` that allows you to show or hide t
 
 To use this property, you must specify the `Name` of the element used to evaluate the condition and the `Value` that will be used to compare.
 Also, you must set to `False` the property `UseNamingComvention` of the survey component.
+
+#### Refer to a TextBox
+
+When a field of the survey depends on a value on a `TextBox`, it is enough to write the condition with the name of the field and the value: the survey component will evaluate the condition and if the value of the `TextBox` is exactly the required value, the field will be displayed. For example:
+
+```csharp
+new Textbox() {
+    Title = "First name (insert 1 to test the filters)",
+    PlaceHolder = "Enter your name",
+    Name = "txt1",
+    IsRequired = true
+},
+new Textbox() {
+    Title = "Middle name",
+    PlaceHolder = "Enter your middle name",
+    Name = "txt2",
+    Description = "Insert your middle name",
+    VisibleIf = "txt1 = '1'" },
+```
+
+The `TextBox` _txt2_ will be displayed if the value of the _txt1_ is equal to `1`. 
+
+#### Refer to a Radiobutton
+
+When a field has to depend on a `Radiobutton`, the value to be specified is the index of the element. For example:
+
+```csharp
+new Radiobutton() {
+    Title = "This is a radiobutton",
+    Description = "Select one of the following options",
+    Name = "radio1", Choices = new List<object>() {
+        "One", "Two", "Three",
+        new RadiobuttonChoice() { Label = "Four" }
+    },
+    IsRequired = true
+},
+new Radiobutton() { 
+    Title = "This is a radiobutton", 
+    Description = "Select one of the following options",
+    Name = "radio12", 
+    Choices = new List<object>() {
+        "One", "Two", "Three",
+        new RadiobuttonChoice() { Label = "Four" }
+    }, 
+    VisibleIf = "radio1 = 1",
+    IsRequired = true },
+```
