@@ -51,7 +51,51 @@ Here is the description of all the elements in the `Survey` component.
 
 ### Checkbox
 
+A checkbox is a small interactive box that can be toggled by the user to indicate an affirmative or negative choice.
+The user can select one or more than one choice in the list. If you want to allow the user to select only one choice for the list,
+it is better to use the _Radiobutton_.
+    
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/12666728-a569-4bc7-958e-a6bed3b3a5ff)
+
+```csharp
+Form form = new Form()
+{
+    Elements = new List<IElement>()
+    {
+        new Checkbox()
+        {
+            Title = "This is a checkbox",
+            Description = "Try to check more than one option",
+            Choices = new List<object>()
+            {
+                "One",
+                "Two",
+                "Three",
+                new CheckboxChoice()
+                {
+                    Label = "Four"
+                }
+            }
+        },
+        new Checkbox()
+        {
+            Title = "This is another checkbox",
+            Description = "Try to check more than one option",
+            Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal,
+            Choices = new List<object>()
+            {
+                "One",
+                "Two",
+                "Three",
+                new CheckboxChoice()
+                {
+                    Label = "Four"
+                }
+            }
+        }
+    }
+};
+```
 
 This is an example of the resulting `json`:
 
@@ -74,7 +118,30 @@ This is an example of the resulting `json`:
 
 ### Comment
 
+A comment is a big _Textbox_ where the user can type any kind of text. Multilines are supported.
+
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/feae3ac0-e6d9-4343-9aa5-4e89e566eaff)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new Comment()
+            {
+                Title = "This is a comment",
+                Description = "Type everything you want to say"
+            },
+            new Comment()
+            {
+                Title = "Comment required",
+                Description = "This comment must be have a value but max 50 characters",
+                IsRequired = true,
+                MaxLength = 50
+            }
+        }
+    };
+```
 
 This is an example of the generated `json`:
 
@@ -87,7 +154,47 @@ This is an example of the generated `json`:
 
 ### Dropdown
 
+A dropdown listis a graphical control element that allows the user to choose one or more value from a list.
+
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/293b54e9-0857-4345-813a-7892b088d165)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new DropdownList()
+            {
+                Title = "This is a dropdown list",
+                Choices = new List<object>()
+                {
+                    "First option",
+                    new DropdownListChoice()
+                    {
+                            Value = "Second",
+                            Label = "Second option"
+                    },
+                    "Third option"
+                }
+            },
+            new DropdownList()
+            {
+                Title = "This is a dropdown list",
+                IsMultiselect = true,
+                Choices = new List<object>()
+                {
+                    "First option",
+                    new DropdownListChoice()
+                    {
+                            Value = "Second",
+                            Label = "Second option"
+                    },
+                    "Third option"
+                }
+            }
+        }
+    };
+```
 
 This is an example of the generated `json`:
 
@@ -110,9 +217,63 @@ This is an example of the generated `json`:
 
 ### HTML
 
+This component displays a HTML text and it is not related to a question. It can be used to display information in any part of the survey.
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new HTML()
+            {
+                Title = "This is a HTML component",
+                Description = "Display HTML code",
+                Body = "<h1>This is a title</h1><p>This is a paragraph</p>"
+            }
+        }
+    };
+```
+
 ### ImagePicker
 
+This component displays a list of images and the user has to select one or more of them.
+
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/17d6dd7a-815f-4208-9860-bd956b2426aa)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new ImagePicker()
+            {
+                Title = "This is an ImagePicker",
+                Description = "Select one image from the following",
+                Choices = new List<ImagePickerChoice>()
+                {
+                    new ImagePickerChoice() { ImageUrl = "http://placekitten.com/220/200", Text = "Kitten 1", Value = "1" },
+                    new ImagePickerChoice() { ImageUrl = "http://placekitten.com/180/200", Text = "Kitten 2", Value = "2" },
+                    new ImagePickerChoice() { ImageUrl = "http://placekitten.com/130/200", Text = "Kitten 3", Value = "3" },
+                    new ImagePickerChoice() { ImageUrl = "http://placekitten.com/270/200", Text = "Kitten 4", Value = "4" }
+                }
+            },
+            new ImagePicker()
+            {
+                Title = "Where do you like to live?",
+                Description = "Select all the images you like from the following",
+                IsMultiselect = true,
+                Choices = new List<ImagePickerChoice>()
+                {
+                    new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/img_5terre.jpg", Text = "5 terre", Value = "1" },
+                    new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/img_forest.jpg", Text = "Forest", Value = "2" },
+                    new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/img_lights.jpg", Text = "Lights", Value = "3" },
+                    new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/img_mountains.jpg", Text = "Mountains", Value = "4" },
+                    new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/paris.jpg", Text = "Paris", Value = "5" }
+                }
+            }
+        }
+    };
+```
 
 This is an example of the generated `json`:
 
@@ -129,7 +290,34 @@ This is an example of the generated `json`:
 
 ### LikertSkill
 
+A Likert scale is a close-ended, forced-choice scale used in a questionnaire that provides a series of answers that go from one extreme to another.
+
+- A Likert scale enables respondents to choose from a linear set of responses that increase or decrease in intensity or strength. It is a close-ended, forced-choice scale.
+- Widely used in psychological and other social science research today, Likert scales enable researchers to collect data that provides nuance and insight into participants’ opinions. This data is quantitative and can easily be analyzed statistically.
+- Likert items often offer response categories on a 1-to-5 scale, but a range of options is possible, including 1-to-7 and 0-to-4 scales or even-numbered scales that typically range from 1-to-4 or 1-to-6.
+    
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/94e67e0d-c11e-4c29-9610-8ea6a2bfd3b0)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new LikertSkill() { 
+                Name = "lsk_1", Title = "Liker Skill Type 1", 
+                LikertSkirtType = PSC.Survey.Shared.Enums.LikertSkillType.Agree 
+            },
+            new LikertSkill() { 
+                Name = "lsk_2", Title = "Liker Skill Type 2", 
+                LikertSkirtType = PSC.Survey.Shared.Enums.LikertSkillType.Helpful 
+            },
+            new LikertSkill() { 
+                Name = "lsk_3", Title = "Liker Skill Type 3", 
+                LikertSkirtType = PSC.Survey.Shared.Enums.LikertSkillType.Satisfied
+            }
+        }
+    };
+```
 
 This is an example of the generated `json`:
 
@@ -152,7 +340,35 @@ This is an example of the generated `json`:
 
 ### Matrix
 
+In a survey, a matrix question is a type of closed-ended question that offers respondents a selection of multiple answers to choose from within a single question. Unlike other closed-ended questions, a matrix question comprises a series of different questions that all share the same set of answer options.
+
+The purpose of a matrix question is to efficiently gather information from respondents about a specific topic by providing them with a comprehensive range of answer options to choose from. This approach to questioning can help to reduce survey length and increase survey response rates, as respondents can quickly provide their answers to a series of related questions.
+
+Overall, the use of matrix questions in surveys can be an effective way to gather detailed information from respondents in a streamlined and efficient manner.
+
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/2df09720-756a-40c1-8bf0-7138b7eb8771)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new Matrix()
+            {
+                Title = "This is a matrix",
+                Description = "Select the appropriate option",
+                Columns = new List<string>()
+                {
+                    "Strongly agree", "Agree", "Neither agree or disagree", "Disagree", "Strongly disagree"
+                },
+                Rows = new List<string>()
+                {
+                    "I like to work", "I like staying at home", "I like to go on holidays" 
+                }
+            }
+        }
+    };
+```
 
 This is an example of the resulting `json`:
 
@@ -179,7 +395,25 @@ This is an example of the resulting `json`:
 
 ### NPS
 
+Net Promoter Score (NPS) is a customer loyalty and satisfaction measurement taken by asking customers how likely they are to recommend your product or service to others on a scale of 1-11 (or 0-10).
+
+NPS can be used as a predictor of business growth. When your company’s NPS is high (or, at least, higher than the industry average), you know that you have a healthy relationship with customers who are likely to act as evangelists for the brand, fuel word of mouth, and generate a positive growth cycle.
+
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/06c6a9d1-4a65-4bb3-91f6-e16b8b278317)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new NPS() { 
+                Name = "nps1", 
+                Title = "This is an example of NPS", 
+                Description = "Select a value between 1 and 11" 
+            }
+        }
+    };
+```
 
 This is an example of the resulting `json`:
 
@@ -194,9 +428,91 @@ This is an example of the resulting `json`:
 
 ### Panel
 
+The panel defines a group of elements that need to be highlighted.
+
+```csharp
+Form form = new Form()
+    {
+    Elements = new List<IElement>()
+    {
+        new Panel() {
+            Name="pnl1",
+            Title = "This is a panel",
+            Description = "Panel example that conains other elements",
+            PanelElements = new List<IElement>()
+            {
+                new Textbox() { Title = "Username", PlaceHolder = "Enter your new name", Name = "txtNewName",
+                    Description = "Insert your new name", IsRequired = true },
+                new Textbox() {
+                    Title = "Password", PlaceHolder = "Enter your password", Name = "txtPassword", IsRequired = true,
+                    TextboxType = PSC.Survey.Shared.Enums.TextboxType.Password
+                },
+                new LikertSkill() { Name = "lsk1", Title = "Liker Skill", LikertSkirtType = PSC.Survey.Shared.Enums.LikertSkillType.Agree }
+            }
+        },
+        new Panel() {
+            Name="pnl1",
+            Title = "This is a second panel",
+            Description = "Panel example that conains other elements",
+            BackgroundColor = "#c0c0c0",
+            PanelElements = new List<IElement>()
+            {
+                new Textbox() { Title = "Username", PlaceHolder = "Enter your new name", Name = "txtNewName",
+                    Description = "Insert your new name", IsRequired = true },
+                new Textbox() {
+                    Title = "Password", PlaceHolder = "Enter your password", Name = "txtPassword", IsRequired = true,
+                    TextboxType = PSC.Survey.Shared.Enums.TextboxType.Password
+                }
+            }
+        }
+
+    }
+};
+```
+
 ### Radiobutton
 
+A radio button is one type of selection indicator in a list of options. If an option is selected, the circle is filled. If the option is not selected, the circle is empty.
+When one circle is selected, the others are deselected, so that only one option may be selected at any time.
+
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/364076da-b596-4b2e-a444-6aba3c8b8be2)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new Radiobutton() { Title = "This is a radiobutton", Description = "Select one of the following options",
+                Name = "radio1", Choices = new List<object>() {
+                    "One", "Two", "Three",
+                    new RadiobuttonChoice() { Label = "Four" }
+                }, IsRequired = true },
+            new Radiobutton() { 
+                Title = "This is a radiobutton", 
+                Description = "Select one of the following options",
+                Name = "radio12", 
+                Choices = new List<object>() {
+                    "One", "Two", "Three",
+                    new RadiobuttonChoice() { Label = "Four" }
+                }, 
+                VisibleIf = "radio1 = 1",
+                IsRequired = true },
+            new Radiobutton() { Title = "This is a second radiobutton", Description = "Select one of the following options",
+                Name = "radio2", Choices = new List<object>() {
+                    "21", "22", "23",
+                    new RadiobuttonChoice() { Label = "24" }
+                }, IsRequired = true, Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal },
+            new Radiobutton() { Title = "This is a second radiobutton", Description = "Select one of the following options",
+                Name = "radio3", Choices = new List<object>() {
+                    "31", "32", "33",
+                    new RadiobuttonChoice() { Label = "34" }
+                }, 
+                IsRequired = true,
+                Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal,
+                Theme = PSC.Survey.Shared.Enums.RadioTheme.Boxed }
+            }
+    };
+```
 
 This is an example of the resulting `json`
 
@@ -219,7 +535,26 @@ This is an example of the resulting `json`
 
 ### Rating
 
+A radio button is one type of selection indicator in a list of options. If an option is selected, the circle is filled. If the option is not selected, the circle is empty.
+When one circle is selected, the others are deselected, so that only one option may be selected at any time.
+
+A radio button is one type of selection indicator in a list of options. If an option is selected, the circle is filled. If the option is not selected, the circle is empty.
+When one circle is selected, the others are deselected, so that only one option may be selected at any time.
+
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/b30db8b0-a98a-4fd0-9a3a-ae3f6430d764)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new Rating() {
+                Title = "How was your experience?",
+                Description = "Select a value between 1 and 5"
+            }
+        }
+    };
+```
 
 This is an example of the generated `json`:
 
@@ -236,7 +571,49 @@ This is an example of the generated `json`:
 
 ### Slider
 
+The slider can be used when allowing users to specify any numeric value within a preset range.
+It is also known as the range slider because you are supposed to create a minimal and maximal value the user can choose from.
+
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/50fcfd7f-8312-4cfb-a00c-ce52183bb880)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new Slider() {
+                Name = "sld1",
+                Title = "Slider",
+                Description = "This is an example of a slider",
+                MinValue = 1,
+                MaxValue = 6,
+                IsVisible = true,
+                Choices = new List<SliderChoice>()
+                {
+                    new SliderChoice() { Value = 1, Label = "One" },
+                    new SliderChoice() { Value = 3, Label = "Three" },
+                    new SliderChoice() { Value = 6, Label = "Six" }
+                },
+                ShowAllTicks = true
+            },
+            new Slider() {
+                Name = "sld2",
+                Title = "Slider",
+                Description = "This is an example of a slider",
+                MinValue = 1,
+                MaxValue = 11,
+                IsVisible = true,
+                Choices = new List<SliderChoice>()
+                {
+                    new SliderChoice() { Value = 1, Label = "One" },
+                    new SliderChoice() { Value = 6, Label = "Six" },
+                    new SliderChoice() { Value = 11, Label = "Eleven" }
+                },
+                ShowAllTicks = true
+            },
+        }
+    };
+```
 
 This is an example of the generated `json`:
 
@@ -248,7 +625,25 @@ This is an example of the generated `json`:
 
 ### Switch
 
+The toggle switch represents a physical switch that allows users to turn things on or off, like a light switch. 
+Use toggle switch controls to present users with two mutually exclusive options (such as on/off), 
+where choosing an option provides immediate results.
+
 ![image](https://github.com/erossini/BlazorSurvey/assets/9497415/ec348b5a-2c5b-458e-8b5a-54e58d46c055)
+
+```csharp
+Form form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new Switch()
+            {
+                Title = "This is a switch",
+                Description = "The switch can be on or off"
+            }
+        }
+    };
+```
 
 This is an example of the generated `json`:
 
@@ -264,6 +659,11 @@ This is an example of the generated `json`:
 ```
 
 ### TextBox
+
+A text box is a rectangular area on the screen where you can enter text. 
+It is a common user interface element found in many types of software programs, such as web browsers, email clients, and word processors. 
+When you click in a text box, a flashing cursor is displayed, indicating you can begin typing. 
+If you are using a tablet, tapping inside a text box may automatically display the on-screen keyboard.
 
 A `TextBox` is a place where the user can type some text like the following screenshot:
 
