@@ -1,0 +1,83 @@
+﻿@page "/rating"
+@inject ToastService toastService
+
+<h3>Rating</h3>
+
+<p>
+    Rating scale is defined as a closed-ended survey question used to represent respondent feedback in a comparative form for specific particular features/products/services. It is one of the most established question types for online and offline surveys where survey respondents are expected to rate an attribute or feature. Rating scale is a variant of the popular multiple-choice question which is widely used to gather information that provides relative information about a specific topic.
+</p>
+
+<p>
+    Researchers use a rating scale in research when they intend to associate a qualitative measure with the various aspects of a product or feature. Generally, this scale is used to evaluate the performance of a product or service, employee skills, customer service performances, customer-first strategy, processes followed for a particular goal etc. Rating scale survey question can be compared to a checkbox question but rating scale provides more information than merely Yes/No.
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+        OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new Rating() {
+                Title = "How was your experience?",
+                Description = "Select a value between 1 and 5"
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new Rating() {
+                        Title = "How was your experience?",
+                        Description = "Select a value between 1 and 5"
+                    }
+                }
+            };
+
+        StateHasChanged();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

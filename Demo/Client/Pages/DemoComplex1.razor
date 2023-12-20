@@ -1,0 +1,131 @@
+﻿@inject ToastService toastService
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" SubmitButtonText="Send" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges" UseNamingComvention="false"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+            {
+                new Checkbox() {
+                    Title = "My first checkbox",
+                    Choices = new List<object>()
+                    {
+                        new CheckboxChoice() { Label = "Check this one" },
+                        new CheckboxChoice() { Label = "Check also this one" },
+                        new CheckboxChoice() { Label = "And this one" },
+                        new CheckboxChoice() { Label = "Maybe this one" },
+                    }
+                },
+                new Textbox() { Title = "First name (insert 1 to test the filters)", PlaceHolder = "Enter your name", Name = "txt1", IsRequired = true },
+                new Textbox() { Title = "Middle name", PlaceHolder = "Enter your middle name", Name = "txt2",
+                    Description = "Insert your middle name", VisibleIf = "txt1 = '1'" },
+                new Textbox() { Title = "Last name", PlaceHolder = "Enter your last name", Name = "txt3",
+                    Description = "Insert your last name", IsRequired = true },
+                new Radiobutton() { Title = "This is a radiobutton", Description = "Select one of the following options",
+                    Name = "radio1", Choices = new List<object>() {
+                        "One", "Two", "Three",
+                        new RadiobuttonChoice() { Label = "Four", VisibleIf = "txt1 = '1'" }
+                    }, IsRequired = true },
+                new Radiobutton() { Title = "This is a second radiobutton", Description = "Select one of the following options",
+                    Name = "radio2", Choices = new List<object>() {
+                        "21", "22", "23",
+                        new RadiobuttonChoice() { Label = "24", VisibleIf = "txt1 = '1'" }
+                    }, IsRequired = true, Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal },
+                new Radiobutton() { Title = "This is a second radiobutton", Description = "Select one of the following options",
+                    Name = "radio3", Choices = new List<object>() {
+                        "31", "32", "33",
+                        new RadiobuttonChoice() { Label = "34", VisibleIf = "txt1 = '1'" }
+                    }, IsRequired = true,
+                    Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal,
+                    Theme = PSC.Survey.Shared.Enums.RadioTheme.Boxed },
+                new Panel() {
+                    Name="pnl1",
+                    Title = "This is a panel",
+                    Description = "Panel example that conains other elements",
+                    PanelElements = new List<IElement>()
+                    {
+                        new Textbox() { Title = "Username", PlaceHolder = "Enter your new name", Name = "txtNewName",
+                            Description = "Insert your new name", IsRequired = true },
+                        new Textbox() {
+                            Title = "Password", PlaceHolder = "Enter your password", Name = "txtPassword", IsRequired = true,
+                            TextboxType = PSC.Survey.Shared.Enums.TextboxType.Password
+                        },
+                        new LikertSkill() { Name = "lsk1", Title = "Liker Skill", LikertSkirtType = PSC.Survey.Shared.Enums.LikertSkillType.Agree }
+                    }
+                },
+                new Slider() {
+                    Name = "sld1",
+                    Title = "Slider",
+                    Description = "This is an example of a slider",
+                    MinValue = 1,
+                    MaxValue = 11,
+                    IsVisible = true,
+                    Choices = new List<SliderChoice>()
+                    {
+                        new SliderChoice() { Value = 1, Label = "One" },
+                        new SliderChoice() { Value = 6, Label = "Six" },
+                        new SliderChoice() { Value = 11, Label = "Eleven" }
+                    }
+                },
+                                new DropdownList()
+                {
+                    Title = "This is a dropdown list",
+                    Choices = new List<object>()
+                    {
+                        "First option",
+                        new DropdownListChoice()
+                        {
+                             Value = "Second",
+                             Label = "Second option"
+                        },
+                        "Third option"
+                    }
+                },
+                new Switch()
+                {
+                    Title = "This is a switch",
+                    Description = "On and off"
+                }
+            }
+        };
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

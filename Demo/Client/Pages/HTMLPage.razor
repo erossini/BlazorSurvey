@@ -1,0 +1,53 @@
+﻿@page "/html"
+
+<h3>HTML</h3>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" />
+}
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new HTML()
+            {
+                Title = "This is a HTML component",
+                Description = "Display HTML code",
+                Body = "&lt;h1>This is a title&lt;/h1>;&lt>This is a paragraph&lt;/p>"
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new HTML()
+                    {
+                        Title = "This is a HTML component",
+                        Description = "Display HTML code",
+                        Body = "<h1>This is a title</h1><p>This is a paragraph</p>"
+                    }
+                }
+            };
+
+        StateHasChanged();
+    }
+}

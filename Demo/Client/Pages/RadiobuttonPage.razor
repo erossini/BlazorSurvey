@@ -1,0 +1,138 @@
+﻿@page "/radiobutton"
+@inject ToastService toastService
+
+<h3>Radiobutton</h3>
+
+<p>
+    A radio button is one type of selection indicator in a list of options. If an option is selected, the circle is filled. If the option is not selected, the circle is empty.
+    When one circle is selected, the others are deselected, so that only one option may be selected at any time.
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges" UseNamingComvention="false"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+<Collapsable Title="Data Mapping" Collapsed="true" Value="">
+    <FormDataMapView dataMaps="dataMap" />
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+        Form form = new Form()
+        {
+        Elements = new List&lt;IElement>()
+        {
+        new Radiobutton() {
+        Title = "This is a radiobutton",
+        Description = "Select one of the following options",
+        Name = "radio1",
+        Choices = new List&lt;object>() {
+        "One", "Two", "Three",
+        new RadiobuttonChoice() { Label = "Four" }
+        },
+        IsRequired = true
+        },
+        new Radiobutton() {
+        Title = "This is a second radiobutton",
+        Description = "Select one of the following options",
+        Name = "radio2",
+        Choices = new List&lt;object>() {
+        "21", "22", "23",
+        new RadiobuttonChoice() { Label = "24" }
+        },
+        IsRequired = true,
+        Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal
+        },
+        new Radiobutton() {
+        Title = "This is a second radiobutton",
+        Description = "Select one of the following options",
+        Name = "radio3",
+        Choices = new List&lt;object>() {
+        "31", "32", "33",
+        new RadiobuttonChoice() { Label = "34" }
+        },
+        IsRequired = true,
+        Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal,
+        Theme = PSC.Survey.Shared.Enums.RadioTheme.Boxed
+        }
+        }
+        };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+    List<FormDataMap> dataMap;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new Radiobutton() { Title = "This is a radiobutton", Description = "Select one of the following options",
+                        Name = "radio1", Choices = new List<object>() {
+                            "One", "Two", "Three",
+                            new RadiobuttonChoice() { Label = "Four" }
+                        }, IsRequired = true },
+                    new Radiobutton() { 
+                        Title = "This is a radiobutton", 
+                        Description = "Select one of the following options",
+                        Name = "radio12", 
+                        Choices = new List<object>() {
+                            "One", "Two", "Three",
+                            new RadiobuttonChoice() { Label = "Four" }
+                        }, 
+                        VisibleIf = "radio1 = 1",
+                        IsRequired = true },
+                    new Radiobutton() { Title = "This is a second radiobutton", Description = "Select one of the following options",
+                        Name = "radio2", Choices = new List<object>() {
+                            "21", "22", "23",
+                            new RadiobuttonChoice() { Label = "24" }
+                        }, IsRequired = true, Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal },
+                    new Radiobutton() { Title = "This is a second radiobutton", Description = "Select one of the following options",
+                        Name = "radio3", Choices = new List<object>() {
+                            "31", "32", "33",
+                            new RadiobuttonChoice() { Label = "34" }
+                        }, 
+                        IsRequired = true,
+                        Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal,
+                        Theme = PSC.Survey.Shared.Enums.RadioTheme.Boxed }
+                    }
+            };
+
+        StateHasChanged();
+        dataMap = form.GetDataMapping();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

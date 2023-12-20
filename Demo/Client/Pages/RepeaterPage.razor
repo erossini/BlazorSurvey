@@ -1,0 +1,104 @@
+﻿@page "/repeater"
+@inject ToastService toastService
+
+<h3>Repeater</h3>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+<Collapsable Title="Data Mapping" Collapsed="true" Value="">
+    <FormDataMapView dataMaps="dataMap" />
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+    List<FormDataMap> dataMap;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+        {
+            Elements = new List<IElement>()
+            {
+                new Repeater()
+                {
+                    Title = "This is a repeater",
+                    Description = "Add multiple times the same data in the form.",
+                    RepeaterElements = new List<IElement>() {
+                        new DropdownList()
+                        {
+                            Title = "This is a dropdown list",
+                            Choices = new List<object>()
+                            {
+                                "1 - First option",
+                                new DropdownListChoice()
+                                {
+                                        Value = "Second",
+                                        Label = "2 - Second option"
+                                },
+                                "3 - Third option"
+                            }
+                        },
+                        new Checkbox()
+                        {
+                            Title = "This is a checkbox",
+                            Description = "Try to check more than one option",
+                            Choices = new List<object>()
+                            {
+                                "One",
+                                "Two",
+                                "Three",
+                                new CheckboxChoice()
+                                {
+                                    Label = "Four"
+                                }
+                            }
+                        },
+                        new Textbox() {
+                            Title = "Normal textbox",
+                            Description = "This is a normal textbox",
+                            PlaceHolder = "Enter your name",
+                            IsRequired = true 
+                        }
+                    }
+                }
+            }
+        };
+
+        StateHasChanged();
+
+        dataMap = form.GetDataMapping();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

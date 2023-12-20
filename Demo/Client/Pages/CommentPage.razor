@@ -1,0 +1,95 @@
+﻿@page "/comment"
+@inject ToastService toastService
+
+<h3>Comment</h3>
+
+<p>
+    A comment is a big <a href="textbox">Textbox</a> where the user can type any kind of text. Multilines are supported.
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new Comment()
+            {
+                Title = "This is a comment",
+                Description = "Type everything you want to say"
+            },
+            new Comment()
+            {
+                Title = "Comment required",
+                Description = "This comment must be have a value but max 50 characters",
+                IsRequired = true,
+                MaxLength = 50
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new Comment()
+                    {
+                        Title = "This is a comment",
+                        Description = "Type everything you want to say"
+                    },
+                    new Comment()
+                    {
+                        Title = "Comment required",
+                        Description = "This comment must be have a value but max 50 characters",
+                        IsRequired = true,
+                        MaxLength = 50
+                    }
+                }
+            };
+
+        StateHasChanged();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

@@ -1,0 +1,110 @@
+﻿@page "/matrix"
+@inject ToastService toastService
+
+<h3>Matrix</h3>
+<p>
+    In a survey, a matrix question is a type of closed-ended question that offers respondents a selection of multiple answers to choose from within a single question. Unlike other closed-ended questions, a matrix question comprises a series of different questions that all share the same set of answer options.
+</p>
+
+<p>
+    The purpose of a matrix question is to efficiently gather information from respondents about a specific topic by providing them with a comprehensive range of answer options to choose from. This approach to questioning can help to reduce survey length and increase survey response rates, as respondents can quickly provide their answers to a series of related questions.
+</p>
+
+<p>
+    Overall, the use of matrix questions in surveys can be an effective way to gather detailed information from respondents in a streamlined and efficient manner.
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new Matrix()
+            {
+                Title = "This is a matrix",
+                Description = "Select the appropriate option",
+                Columns = new List&lt;string>()
+                {
+                    "Strongly agree", 
+                    "Agree", 
+                    "Neither agree or disagree", 
+                    "Disagree", 
+                    "Strongly disagree"
+                },
+                Rows = new List&lt;string>()
+                {
+                    "I like to work", 
+                    "I like staying at home", 
+                    "I like to go on holidays" 
+                }
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+form = new Form()
+    {
+        Elements = new List<IElement>()
+        {
+            new Matrix()
+            {
+                Title = "This is a matrix",
+                Description = "Select the appropriate option",
+                Columns = new List<string>()
+                {
+                    "Strongly agree", "Agree", "Neither agree or disagree", "Disagree", "Strongly disagree"
+                },
+                Rows = new List<string>()
+                {
+                    "I like to work", "I like staying at home", "I like to go on holidays" 
+                }
+            }
+        }
+    };
+
+        StateHasChanged();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

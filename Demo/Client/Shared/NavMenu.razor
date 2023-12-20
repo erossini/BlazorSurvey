@@ -1,0 +1,170 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">SurveyUI</a>
+        <button title="Navigation menu" class="navbar-toggler">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="() => ToggleNavMenu(NavSubmenu.None)">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="() => TogleSubmenu(NavSubmenu.Base)">
+                <span class="oi oi-plus" aria-hidden="true"></span>Base components
+            </NavLink>
+            @if (navSubmenu == NavSubmenu.Base)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="textbox">
+                        <span class="oi oi-align-left" aria-hidden="true"></span> Textbox
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="radiobutton">
+                        <span class="oi oi-circle-check" aria-hidden="true"></span> Radiobutton
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="checkbox">
+                        <span class="oi oi-check" aria-hidden="true"></span> Checkbox
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="dropdownlist">
+                        <span class="oi oi-arrow-bottom" aria-hidden="true"></span> DropdownList
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="switch">
+                        <span class="oi oi-loop" aria-hidden="true"></span> Switch
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="comment">
+                        <span class="oi oi-align-left" aria-hidden="true"></span> Comment
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="html">
+                        <span class="oi oi-check" aria-hidden="true"></span> HTML
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="imagepicker">
+                        <span class="oi oi-image" aria-hidden="true"></span> ImagePicker
+                    </NavLink>
+                </div>
+            }
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="() => TogleSubmenu(NavSubmenu.Custom)">
+                <span class="oi oi-plus" aria-hidden="true"></span>Custom components
+            </NavLink>
+            @if (navSubmenu == NavSubmenu.Custom)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="likertskill">
+                        <span class="oi oi-check" aria-hidden="true"></span> LikertSkill
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="slider">
+                        <span class="oi oi-check" aria-hidden="true"></span> Slider
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="nps">
+                        <span class="oi oi-bar-chart" aria-hidden="true"></span> NPS
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="matrix">
+                        <span class="oi oi-command" aria-hidden="true"></span> Matrix
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="rating">
+                        <span class="oi oi-star" aria-hidden="true"></span> Rating
+                    </NavLink>
+                </div>
+            }
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="() => TogleSubmenu(NavSubmenu.Containers)">
+                <span class="oi oi-plus" aria-hidden="true"></span>Containers
+            </NavLink>
+            @if (navSubmenu == NavSubmenu.Containers)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="panel">
+                        <span class="oi oi-box" aria-hidden="true"></span> Panel
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="repeater">
+                        <span class="oi oi-circle-check" aria-hidden="true"></span> Repeater
+                    </NavLink>
+                </div>
+            }
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="() => TogleSubmenu(NavSubmenu.Functions)">
+                <span class="oi oi-plus" aria-hidden="true"></span>Functions
+            </NavLink>
+            @if (navSubmenu == NavSubmenu.Functions)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="importCSV">
+                        <span class="oi oi-inbox" aria-hidden="true"></span> Import CSV
+                    </NavLink>
+                </div>
+            }
+        </div>
+
+@*        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="./doc/index.html" >
+                <span class="oi oi-book" aria-hidden="true"></span> Documentation
+            </NavLink>
+        </div>*@
+    </nav>
+</div>
+
+@code {
+    private enum NavSubmenu
+    {
+        None,
+        Base,
+        Custom,
+        Containers,
+        Functions
+    }
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private NavSubmenu navSubmenu = NavSubmenu.None;
+    private bool collapseNavMenu = true;
+
+
+    private void ToggleNavMenu(NavSubmenu? submenu = null)
+    {
+        collapseNavMenu = !collapseNavMenu;
+        navSubmenu = submenu ?? navSubmenu;
+    }
+
+    private void TogleSubmenu(NavSubmenu submenu)
+    {
+        if (navSubmenu == submenu)
+            navSubmenu = NavSubmenu.None;
+        else
+            navSubmenu = submenu;
+    }
+}

@@ -1,0 +1,83 @@
+﻿@page "/switch"
+@inject ToastService toastService
+
+<h3>Switch</h3>
+
+<p>
+    The toggle switch represents a physical switch that allows users to turn things on or off, like a light switch. 
+    Use toggle switch controls to present users with two mutually exclusive options (such as on/off), 
+    where choosing an option provides immediate results.
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new Switch()
+            {
+                Title = "This is a switch",
+                Description = "The switch can be on or off"
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new Switch()
+                    {
+                        Title = "This is a switch",
+                        Description = "The switch can be on or off"
+                    }
+                }
+            };
+
+        StateHasChanged();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

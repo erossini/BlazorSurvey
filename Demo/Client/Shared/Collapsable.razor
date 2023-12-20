@@ -1,0 +1,38 @@
+﻿<div class="collapsable">
+    <div class="title" @onclick="@Toggle">
+        @if (Collapsed)
+        {
+            <span class="oi oi-chevron-right mr-1"></span>
+        }
+        else
+        {
+            <span class="oi oi-chevron-bottom mr-1"></span>
+        }
+        @Title
+    </div>
+    @if (!string.IsNullOrEmpty(Value))
+    {
+        <div class="value">
+            <h4><span class="badge badge-success">@Value</span></h4>
+        </div>
+    }
+</div>
+
+@if (!Collapsed)
+{
+    <div class="collapsable-panel">
+        @ChildContent
+    </div>
+}
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public bool Collapsed { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Value { get; set; }
+
+    void Toggle()
+    {
+        Collapsed = !Collapsed;
+    }
+}

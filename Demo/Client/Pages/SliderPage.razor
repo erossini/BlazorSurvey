@@ -1,0 +1,132 @@
+﻿@page "/slider"
+@inject ToastService toastService
+
+<h3>Slider</h3>
+
+<p>
+    The slider can be used when allowing users to specify any numeric value within a preset range.
+    It is also known as the range slider because you are supposed to create a minimal and maximal value the user can choose from.
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new Slider() {
+                Name = "sld1",
+                Title = "Slider",
+                Description = "This is an example of a slider",
+                MinValue = 1,
+                MaxValue = 6,
+                IsVisible = true,
+                Choices = new List&lt;SliderChoice>()
+                {
+                    new SliderChoice() { Value = 1, Label = "One" },
+                    new SliderChoice() { Value = 3, Label = "Three" },
+                    new SliderChoice() { Value = 6, Label = "Six" }
+                },
+                ShowAllTicks = true
+            },
+            new Slider() {
+                Name = "sld2",
+                Title = "Slider",
+                Description = "This is an example of a slider",
+                MinValue = 1,
+                MaxValue = 11,
+                IsVisible = true,
+                Choices = new List^lt;SliderChoice>()
+                {
+                    new SliderChoice() { Value = 1, Label = "One" },
+                    new SliderChoice() { Value = 6, Label = "Six" },
+                    new SliderChoice() { Value = 11, Label = "Eleven" }
+                },
+                ShowAllTicks = true
+            },
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new Slider() {
+                        Name = "sld1",
+                        Title = "Slider",
+                        Description = "This is an example of a slider",
+                        MinValue = 1,
+                        MaxValue = 6,
+                        IsVisible = true,
+                        Choices = new List<SliderChoice>()
+                        {
+                            new SliderChoice() { Value = 1, Label = "One" },
+                            new SliderChoice() { Value = 3, Label = "Three" },
+                            new SliderChoice() { Value = 6, Label = "Six" }
+                        },
+                        ShowAllTicks = true
+                    },
+                    new Slider() {
+                        Name = "sld2",
+                        Title = "Slider",
+                        Description = "This is an example of a slider",
+                        MinValue = 1,
+                        MaxValue = 11,
+                        IsVisible = true,
+                        Choices = new List<SliderChoice>()
+                        {
+                            new SliderChoice() { Value = 1, Label = "One" },
+                            new SliderChoice() { Value = 6, Label = "Six" },
+                            new SliderChoice() { Value = 11, Label = "Eleven" }
+                        },
+                        ShowAllTicks = true
+                    },
+                }
+            };
+
+        StateHasChanged();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

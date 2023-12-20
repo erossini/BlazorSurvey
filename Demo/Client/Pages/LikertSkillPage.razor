@@ -1,0 +1,107 @@
+﻿@page "/likertskill"
+@inject ToastService toastService
+
+<h3>Likert Skill</h3>
+
+<p>
+    A Likert scale is a close-ended, forced-choice scale used in a questionnaire that provides a series of answers that go from one extreme to another.
+
+    <ul>
+        <li>
+            A Likert scale enables respondents to choose from a linear set of responses that increase or decrease in intensity or strength. It is a close-ended, forced-choice scale.
+        </li>
+        <li>
+            Widely used in psychological and other social science research today, Likert scales enable researchers to collect data that provides nuance and insight into participants’ opinions. This data is quantitative and can easily be analyzed statistically.
+       </li>
+        <li>
+            Likert items often offer response categories on a 1-to-5 scale, but a range of options is possible, including 1-to-7 and 0-to-4 scales or even-numbered scales that typically range from 1-to-4 or 1-to-6.
+        </li>
+    </ul>
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new LikertSkill() { 
+                Name = "lsk_1", Title = "Liker Skill Type 1", 
+                LikerSkirtType = PSC.Survey.Shared.Enums.LikerSkillType.Agree 
+            },
+            new LikertSkill() { 
+                Name = "lsk_2", Title = "Liker Skill Type 2", 
+                LikerSkirtType = PSC.Survey.Shared.Enums.LikerSkillType.Helpful 
+            },
+            new LikertSkill() { 
+                Name = "lsk_3", Title = "Liker Skill Type 3", 
+                LikerSkirtType = PSC.Survey.Shared.Enums.LikerSkillType.Satisfied
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new LikertSkill() { 
+                        Name = "lsk_1", Title = "Liker Skill Type 1", 
+                        LikertSkirtType = PSC.Survey.Shared.Enums.LikertSkillType.Agree 
+                    },
+                    new LikertSkill() { 
+                        Name = "lsk_2", Title = "Liker Skill Type 2", 
+                        LikertSkirtType = PSC.Survey.Shared.Enums.LikertSkillType.Helpful 
+                    },
+                    new LikertSkill() { 
+                        Name = "lsk_3", Title = "Liker Skill Type 3", 
+                        LikertSkirtType = PSC.Survey.Shared.Enums.LikertSkillType.Satisfied
+                    }
+                }
+            };
+
+        StateHasChanged();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

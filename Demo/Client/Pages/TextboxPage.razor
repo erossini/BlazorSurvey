@@ -1,0 +1,226 @@
+﻿@page "/textbox"
+@inject ToastService toastService
+
+<h3>Textbox</h3>
+
+<p>
+    A text box is a rectangular area on the screen where you can enter text. 
+    It is a common user interface element found in many types of software programs, such as web browsers, email clients, and word processors. 
+    When you click in a text box, a flashing cursor is displayed, indicating you can begin typing. 
+    If you are using a tablet, tapping inside a text box may automatically display the on-screen keyboard.
+</p>
+
+<p>
+    There are a lot of different type of Texboxes based on the content the user is allowed to insert. 
+    For example, there is a numberic textbox where the user can insert only numbers. 
+</p>
+
+@if(form == null)
+{
+    <p>Generating form...</p>
+}
+else {
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges" ShowQuestionNumber="false" ShowSeparator="true"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new Textbox() {
+                Title = "Normal textbox",
+                Description = "This is a normal textbox",
+                PlaceHolder = "Enter your name",
+                IsRequired = true },
+            new Textbox() {
+                Title = "Password",
+                PlaceHolder = "Enter your future password",
+                Name = "txtPassword",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.Password,
+                IsRequired = true },
+            new Textbox() {
+                Title = "Textbox max length 10",
+                PlaceHolder = "Enter your name",
+                Name = "txtMaxLength",
+                MaxLength = 10,
+                IsRequired = true },
+            new Textbox() {
+                Title = "Email validation",
+                PlaceHolder = "Enter your email",
+                Name = "txtEmail",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.Email },
+            new Textbox() {
+                Title = "Number validation",
+                PlaceHolder = "Enter a number",
+                Name = "txtNumber",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.Number },
+            new Textbox() {
+                Title = "Your favorite color",
+                PlaceHolder = "Pick up a color",
+                Name = "txtColor",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.Color },
+            new Textbox() {
+                Title = "Your favorite website",
+                PlaceHolder = "Enter the url",
+                Name = "txtUrl",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.URL },
+            new Textbox() {
+                Title = "Phone number",
+                PlaceHolder = "Enter your phone number",
+                Name = "txtPhone",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.Telephone },
+            new Textbox() {
+                Title = "Select a date",
+                PlaceHolder = "Pick up a date you like",
+                Name = "txtDate",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.Date },
+            new Textbox() {
+                Title = "Select a date and time",
+                PlaceHolder = "Pick up a date you like",
+                Name = "txtDateTime",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.DateTime },
+            new Textbox() {
+                Title = "Select a week",
+                PlaceHolder = "Pick up a week you like",
+                Name = "txtWeek",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.Week },
+            new Textbox() {
+                Title = "Select a month",
+                PlaceHolder = "Pick up a month you like",
+                Name = "txtMonth",
+                TextboxType = PSC.Survey.Shared.Enums.TextboxType.Month },
+            new Panel()
+            {
+                Title = "This panel contains a Textbox",
+                Elements = new List&lt;IElement>()
+                {
+                    new Textbox() {
+                        Title = "Normal textbox",
+                        Description = "This is a normal textbox in a Panel",
+                        PlaceHolder = "Enter your name"
+                    }
+                }
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new Textbox() {
+                        Title = "Normal textbox",
+                        Description = "This is a normal textbox",
+                        PlaceHolder = "Enter your name",
+                        IsRequired = true },
+                    new Textbox() {
+                        Title = "Password",
+                        PlaceHolder = "Enter your future password",
+                        Name = "txtPassword",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Password,
+                        IsRequired = true },
+                    new Textbox() {
+                        Title = "Textbox max length 10",
+                        PlaceHolder = "Enter your name",
+                        Name = "txtMaxLength",
+                        MaxLength = 10,
+                        IsRequired = true },
+                    new Textbox() {
+                        Title = "Email validation",
+                        PlaceHolder = "Enter your email",
+                        Name = "txtEmail",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Email },
+                    new Textbox() {
+                        Title = "Number validation",
+                        PlaceHolder = "Enter a number",
+                        Name = "txtNumber",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Number },
+                    new Textbox() {
+                        Title = "Your favorite color",
+                        PlaceHolder = "Pick up a color",
+                        Name = "txtColor",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Color },
+                    new Textbox() {
+                        Title = "Your favorite website",
+                        PlaceHolder = "Enter the url",
+                        Name = "txtUrl",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.URL },
+                    new Textbox() {
+                        Title = "Phone number",
+                        PlaceHolder = "Enter your phone number",
+                        Name = "txtPhone",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Telephone },
+                    new Textbox() {
+                        Title = "Select a date",
+                        PlaceHolder = "Pick up a date you like",
+                        Name = "txtDate",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Date },
+                    new Textbox() {
+                        Title = "Select a date and time",
+                        PlaceHolder = "Pick up a date you like",
+                        Name = "txtDateTime",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.DateTime },
+                    new Textbox() {
+                        Title = "Select a week",
+                        PlaceHolder = "Pick up a week you like",
+                        Name = "txtWeek",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Week },
+                    new Textbox() {
+                        Title = "Select a month",
+                        PlaceHolder = "Pick up a month you like",
+                        Name = "txtMonth",
+                        TextboxType = PSC.Survey.Shared.Enums.TextboxType.Month },
+                    new Panel()
+                    {
+                        Title = "This panel contains a Textbox",
+                        PanelElements = new List<IElement>()
+                        {
+                            new Textbox() {
+                                Title = "Normal textbox",
+                                Description = "This is a normal textbox in a Panel",
+                                PlaceHolder = "Enter your name"
+                            }
+                        }
+                    }
+                }
+            };
+
+        StateHasChanged();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

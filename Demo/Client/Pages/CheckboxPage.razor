@@ -1,0 +1,141 @@
+﻿@page "/checkbox"
+@inject ToastService toastService
+
+<h3>Checkbox</h3>
+
+<p>
+    A checkbox is a small interactive box that can be toggled by the user to indicate an affirmative or negative choice.
+    The user can select one or more than one choice in the list. If you want to allow the user to select only one choice for the list,
+    it is better to use the <a href="radiobutton">Radiobutton</a>.
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges" 
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+<Collapsable Title="Data Mapping" Collapsed="true" Value="">
+    <FormDataMapView dataMaps="dataMap" />
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new Checkbox()
+            {
+                Title = "This is a checkbox",
+                Description = "Try to check more than one option",
+                Choices = new List&lt;object>()
+                {
+                    "One",
+                    "Two",
+                    "Three",
+                    new CheckboxChoice()
+                    {
+                        Label = "Four"
+                    }
+                }
+            },
+            new Checkbox()
+            {
+                Title = "This is another checkbox",
+                Description = "Try to check more than one option",
+                Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal,
+                Choices = new List&lt;object>()
+                {
+                    "One",
+                    "Two",
+                    "Three",
+                    new CheckboxChoice()
+                    {
+                        Label = "Four"
+                    }
+                }
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+    List<FormDataMap> dataMap;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+        {
+            Elements = new List<IElement>()
+            {
+                new Checkbox()
+                {
+                    Title = "This is a checkbox",
+                    Description = "Try to check more than one option",
+                    Choices = new List<object>()
+                    {
+                        "One",
+                        "Two",
+                        "Three",
+                        new CheckboxChoice()
+                        {
+                            Label = "Four"
+                        }
+                    }
+                },
+                new Checkbox()
+                {
+                    Title = "This is another checkbox",
+                    Description = "Try to check more than one option",
+                    Orientation = PSC.Survey.Shared.Enums.Orientation.Horizontal,
+                    Choices = new List<object>()
+                    {
+                        "One",
+                        "Two",
+                        "Three",
+                        new CheckboxChoice()
+                        {
+                            Label = "Four"
+                        }
+                    }
+                }
+            }
+        };
+
+        StateHasChanged();
+
+        dataMap = form.GetDataMapping();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

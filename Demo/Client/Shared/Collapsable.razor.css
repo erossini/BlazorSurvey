@@ -1,0 +1,15 @@
+﻿.collapsable-panel {
+    border: 1px solid #eee;
+    padding: 25px;
+    background-color: white;
+    overflow: hidden;
+}
+
+.collapsable .title {
+    display: table-cell
+}
+
+.collapsable .value {
+    display: table-cell;
+    text-align: right;
+}

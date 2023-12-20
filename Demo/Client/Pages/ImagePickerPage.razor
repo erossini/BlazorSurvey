@@ -1,0 +1,97 @@
+﻿@page "/imagepicker"
+@inject ToastService toastService
+
+<h3>ImagePicker</h3>
+
+<p>
+
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+<Collapsable Title="Data Mapping" Collapsed="true" Value="">
+    <FormDataMapView dataMaps="dataMap" />
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+    List<FormDataMap> dataMap;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new ImagePicker()
+                    {
+                        Title = "This is an ImagePicker",
+                        Description = "Select one image from the following",
+                        Choices = new List<ImagePickerChoice>()
+                        {
+                            new ImagePickerChoice() { ImageUrl = "http://placekitten.com/220/200", Text = "Kitten 1", Value = "1" },
+                            new ImagePickerChoice() { ImageUrl = "http://placekitten.com/180/200", Text = "Kitten 2", Value = "2" },
+                            new ImagePickerChoice() { ImageUrl = "http://placekitten.com/130/200", Text = "Kitten 3", Value = "3" },
+                            new ImagePickerChoice() { ImageUrl = "http://placekitten.com/270/200", Text = "Kitten 4", Value = "4" }
+                        }
+                    },
+                    new ImagePicker()
+                    {
+                        Title = "Where do you like to live?",
+                        Description = "Select all the image you like from the following",
+                        IsMultiselect = true,
+                        Choices = new List<ImagePickerChoice>()
+                        {
+                            new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/img_5terre.jpg", Text = "5 terre", Value = "1" },
+                            new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/img_forest.jpg", Text = "Forest", Value = "2" },
+                            new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/img_lights.jpg", Text = "Lights", Value = "3" },
+                            new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/img_mountains.jpg", Text = "Mountains", Value = "4" },
+                            new ImagePickerChoice() { ImageUrl = "https://www.w3schools.com/css/paris.jpg", Text = "Paris", Value = "5" }
+                        }
+                    }
+                }
+            };
+
+        StateHasChanged();
+
+        dataMap = form.GetDataMapping();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

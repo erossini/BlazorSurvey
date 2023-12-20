@@ -1,0 +1,85 @@
+﻿@page "/nps"
+@inject ToastService toastService
+
+<h3>Net Promoter Score (NPS)</h3>
+
+<p>
+    Net Promoter Score (NPS) is a customer loyalty and satisfaction measurement taken from asking customers how likely they are to recommend your product or service to others on a scale of 1-11 (or 0-10).
+</p>
+
+<p>
+    NPS can be used as a predictor of business growth. When your company’s NPS is high (or, at least, higher than the industry average), you know that you have a healthy relationship with customers who are likely to act as evangelists for the brand, fuel word of mouth, and generate a positive growth cycle.
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new NPS() { 
+                Name = "nps1", 
+                Title = "This is an example of NPS", 
+                Description = "Select a value between 1 and 11" 
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new NPS() { 
+                        Name = "nps1", 
+                        Title = "This is an example of NPS", 
+                        Description = "Select a value between 1 and 11" 
+                    }
+                }
+            };
+
+        StateHasChanged();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}

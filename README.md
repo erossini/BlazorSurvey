@@ -4,7 +4,9 @@
 
 This component is a survey generator for [Blazor WebAssembly](https://www.puresourcecode.com/tag/blazor-webassembly/) and [Blazor Server](https://www.puresourcecode.com/tag/blazor-server/). The component is built with .NET6 but it is working also with NET8.
 
-The source code is not publicly available, but you can check the demo [here](https://survey.puresourcecode.com).
+> The source code is not publicly available. If you make donation, please use the [Sponsor](https://github.com/sponsors/erossini) button at the top of the [GitHub repository](https://github.com/erossini/BlazorSurvey) and I will give you access to the NuGet feed. If you want to buy a licence or the full source code, but you can check the demo [here](https://survey.puresourcecode.com).
+
+The source code of the demo project is not working if you don't have access to the private NuGet feed.
 
 If you are interested in using it or like to have the source code, please contact me.
 

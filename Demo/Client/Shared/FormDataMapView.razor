@@ -1,0 +1,52 @@
+﻿@if (dataMaps != null)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Question Number</th>
+                <th>Description</th>
+                <th>Question Text</th>
+                <th>Question Type</th>
+                <th>Option Number</th>
+                <th>Option Text</th>
+                <th>Option Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (FormDataMap item in dataMaps)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.QuestionNumber
+                    </td>
+                    <td>
+                        @item.Description
+                    </td>
+                    <td>
+                        @item.QuestionText
+                    </td>
+                    <td>
+                        @item.QuestionType
+                    </td>
+                    <td>
+                        @item.OptionNumber
+                    </td>
+                    <td>
+                        @item.OptionText
+                    </td>
+                    <td>
+                        @item.OptionValue
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter] public List<FormDataMap> dataMaps { get; set; }
+}

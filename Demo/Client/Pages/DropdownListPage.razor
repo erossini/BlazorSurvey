@@ -1,0 +1,133 @@
+﻿@page "/dropdownlist"
+@inject ToastService toastService
+
+<h3>Dropdown List</h3>
+
+<p>
+    A dropdown listis a graphical control element that allows the user to choose one or more value from a list.
+</p>
+
+@if (form == null)
+{
+    <p>Generating form...</p>
+}
+else
+{
+    <Survey Form="form" ShowDebug="true" OnFormValuesChanged="OnFormValuesChanges"
+            OnFormSubmitted="OnFormSubmitted" OnFormSubmittedError="OnFormSubmittedError" />
+}
+
+<Collapsable Title="CSV Template" Collapsed="true" Value="">
+    @((MarkupString)CSVTemplate)
+</Collapsable>
+<Collapsable Title="Data Mapping" Collapsed="true" Value="">
+    <FormDataMapView dataMaps="dataMap" />
+</Collapsable>
+
+<Collapsable Title="C# Code" Collapsed="true" Value="">
+    <CodeSnippet Language="Language.csharp" Style="Style.VisualStudio">
+Form form = new Form()
+    {
+        Elements = new List&lt;IElement>()
+        {
+            new DropdownList()
+            {
+                Title = "This is a dropdown list",
+                Choices = new List^lt;object>()
+                {
+                    "First option",
+                    new DropdownListChoice()
+                    {
+                            Value = "Second",
+                            Label = "Second option"
+                    },
+                    "Third option"
+                }
+            },
+            new DropdownList()
+            {
+                Title = "This is a dropdown list",
+                IsMultiselect = true,
+                Choices = new List&lt;object>()
+                {
+                    "First option",
+                    new DropdownListChoice()
+                    {
+                            Value = "Second",
+                            Label = "Second option"
+                    },
+                    "Third option"
+                }
+            }
+        }
+    };
+    </CodeSnippet>
+</Collapsable>
+<div class="space50"></div>
+
+@code {
+    Form form;
+    string CSVTemplate;
+    List<FormDataMap> dataMap;
+
+    CSVGenerator csv = new CSVGenerator();
+
+    protected override async Task OnInitializedAsync()
+    {
+        form = new Form()
+            {
+                Elements = new List<IElement>()
+                {
+                    new DropdownList()
+                    {
+                        Title = "This is a dropdown list",
+                        Choices = new List<object>()
+                        {
+                            "First option",
+                            new DropdownListChoice()
+                            {
+                                    Value = "Second",
+                                    Label = "Second option"
+                            },
+                            "Third option"
+                        }
+                    },
+                    new DropdownList()
+                    {
+                        Title = "This is a dropdown list",
+                        IsMultiselect = true,
+                        Choices = new List<object>()
+                        {
+                            "First option",
+                            new DropdownListChoice()
+                            {
+                                    Value = "Second",
+                                    Label = "Second option"
+                            },
+                            "Third option"
+                        }
+                    }
+                }
+            };
+
+        StateHasChanged();
+        dataMap = form.GetDataMapping();
+    }
+
+    private void OnFormValuesChanges()
+    {
+        CSVTemplate = csv.GetColumnsTemplate(form);
+    }
+
+    private async Task OnFormSubmitted(FormSubmittedEventArgs e)
+    {
+        CSVTemplate = csv.GetCSV(form.Elements, e.RawValues).Replace("\n", "<br>");
+
+        toastService.ShowToast("Form valid! The result Json and CSV are created.", Enums.ToastLevel.Success);
+    }
+
+    private async Task OnFormSubmittedError()
+    {
+        toastService.ShowToast("Form is not valid! Check the form to see the errors.", Enums.ToastLevel.Error);
+    }
+}
